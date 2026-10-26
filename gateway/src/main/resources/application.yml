@@ -1,0 +1,33 @@
+server:
+  port: ${GATEWAY_PORT:8080}
+  servlet:
+    context-path: ${SERVER_SERVLET_CONTEXT_PATH:/}
+
+spring:
+  application:
+    name: ai-security-gateway
+  data:
+    mongodb:
+      uri: ${MONGODB_URI:mongodb://localhost:27017/security_gateway}
+      auto-index-creation: true
+
+springdoc:
+  api-docs:
+    path: /api/v1/v3/api-docs
+  swagger-ui:
+    path: /api/v1/swagger-ui.html
+
+gateway:
+  ml-service-url: ${ML_SERVICE_URL:http://127.0.0.1:8000}
+  ml-timeout-ms: ${ML_TIMEOUT_MS:1500}
+  risk-low-max: ${RISK_LOW_MAX:29}
+  risk-medium-max: ${RISK_MEDIUM_MAX:69}
+  max-request-body-bytes: ${MAX_REQUEST_BODY_BYTES:65536}
+  rate-limit-per-minute: ${RATE_LIMIT_PER_MINUTE:60}
+  demo-upstream-url: ${DEMO_UPSTREAM_URL:http://localhost:8080/api/v1/demo/upstream}
+
+logging:
+  level:
+    root: INFO
+    com.security.gateway: DEBUG
+    org.springframework.data.mongodb: WARN

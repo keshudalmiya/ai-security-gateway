@@ -1,0 +1,48 @@
+# Logs and temp files
+*.log
+*.tmp
+*.bak
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+
+# Python / ML
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+.venv/
+env/
+ml/data/*
+!ml/data/.gitkeep
+ml/artifacts/*.joblib
+ml/artifacts/*.pkl
+
+# Node / Frontend
+node_modules/
+dist/
+dist-ssr/
+*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Java / Gradle / Maven
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+target/
+*.class
+*.jar
+*.war
+.idea/
+*.iml
+.vscode/
+.project
+.classpath
+.settings/

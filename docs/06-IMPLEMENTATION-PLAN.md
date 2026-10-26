@@ -1,0 +1,157 @@
+# Implementation Plan
+## AI-Powered Web API Security Gateway
+
+## 1. Build Strategy
+
+Implement in small, testable phases. Do not generate the entire application in one pass. First inspect the existing repository, identify what already works, then implement a vertical slice end-to-end.
+
+**Required architecture:** React + Vite + TypeScript frontend; Java/Spring Boot gateway; Python/FastAPI + scikit-learn ML service; MongoDB persistence. Keep local development functional before considering AWS.
+
+## 2. Phase 0 — Repository Audit and Setup
+
+Tasks:
+- Inspect all existing files, package manifests, source folders, and README.
+- Identify working code and preserve it.
+- Read all provided requirement documents.
+- Create/update `docs/` and put these six requirement documents there.
+- Propose the final folder structure and service ports.
+- Create `.gitignore` and `.env.example`.
+- Document prerequisites and startup commands.
+
+**Exit criteria:** Architecture and repository plan are written; no existing work is deleted without a reason.
+
+## 3. Phase 1 — API Contracts and Local Skeleton
+
+Tasks:
+- Define shared JSON contracts and enums.
+- Scaffold Spring Boot gateway, FastAPI service, React dashboard, and MongoDB connection.
+- Add `/health` endpoints.
+- Add request ID/correlation ID support.
+- Add consistent error responses and input validation.
+- Add optional Docker Compose for MongoDB and local services.
+
+**Exit criteria:** All services start independently; dashboard can display health states; OpenAPI docs work.
+
+## 4. Phase 2 — Dataset and Feature Pipeline
+
+Tasks:
+- Select and document the CSIC HTTP dataset or another suitable public dataset.
+- Record source URL, license, label mapping, class distribution, and limitations.
+- Parse and clean records reproducibly.
+- Build one reusable feature extraction implementation for training and inference.
+- Create train/validation/test splits with fixed random seed and leakage checks.
+- Save preprocessing metadata and dataset summary.
+
+**Exit criteria:** Script runs from documented commands; output schema is stable; tests cover feature extraction; no fabricated dataset claims.
+
+## 5. Phase 3 — Rule-Based Detection Baseline
+
+Tasks:
+- Implement request validation and bounded input handling.
+- Add rules for SQL injection indicators, XSS indicators, path traversal, request-rate limits, and invalid/oversized requests.
+- Give each rule a stable ID, severity, explanation, and tests.
+- Implement rule-only mode for evaluation.
+- Store rule matches in the decision event.
+
+**Exit criteria:** Positive and negative tests pass; rule-only evaluation generates real metrics.
+
+## 6. Phase 4 — ML Model and FastAPI Service
+
+Tasks:
+- Train Isolation Forest on the documented training data, using only intended training features.
+- Define anomaly score normalization and threshold selection using validation data.
+- Save model and schema/version metadata.
+- Implement `/predict` and `/health`.
+- Validate feature names, types, and ranges.
+- Add missing-model and inference-error handling.
+- Implement ML-only mode for evaluation.
+
+**Exit criteria:** Model loads at startup; a test feature vector returns a validated response; ML-only evaluation is reproducible.
+
+## 7. Phase 5 — Hybrid Risk Engine and Gateway
+
+Tasks:
+- Combine rule severity and ML anomaly score with documented logic.
+- Implement configurable thresholds and critical-rule override.
+- Support `ALLOW`, `FLAG`, and `BLOCK`.
+- Add ML timeout/failure fallback policy.
+- Persist sanitized request events to MongoDB.
+- Add safe local demo upstream only if needed; never accept arbitrary upstream URLs.
+- Add rate limiting and request-size limits.
+
+**Exit criteria:** Integration tests cover all three decisions, critical rule overrides, ML timeout, database error, and malformed input.
+
+## 8. Phase 6 — Dashboard
+
+Implement in this order:
+1. App shell/navigation and system status.
+2. Overview KPI cards and charts backed by API.
+3. Request Tester form and decision result.
+4. Request Logs with filters and pagination.
+5. Request Details explanation.
+6. Evaluation comparison and export.
+7. Rules list and protected toggles if included.
+8. System Health/settings view.
+
+**Exit criteria:** All screens use live API data or honest empty states; no fake metrics; responsive and keyboard-usable.
+
+## 9. Phase 7 — Evaluation and Research Results
+
+Tasks:
+- Run Rule-Based, ML-Based, and Hybrid evaluation on the same held-out examples.
+- Calculate Precision, Recall, F1-score, false-positive count/rate, average latency, and p95 latency when appropriate.
+- Test attack categories withheld from rule tuning/training when dataset labels allow it.
+- Save raw machine-readable metrics and a human-readable report.
+- Explain threshold choice, class imbalance, dataset age, limitations, and any false positives/negatives.
+- Make dashboard metrics read from the saved evaluation result.
+
+**Exit criteria:** Every displayed metric is generated by a reproducible script and linked to a run/version.
+
+## 10. Phase 8 — QA, Documentation, Demo
+
+Tasks:
+- Run frontend lint/type checks and build.
+- Run Spring Boot tests.
+- Run pytest for ML service and evaluation scripts.
+- Run end-to-end tests for normal, suspicious, blocked, and dependency-failure scenarios.
+- Verify no secrets or sensitive request content are logged.
+- Write README with prerequisites, install, environment, run, test, train, evaluate, and troubleshooting.
+- Prepare a short demonstration script and architecture explanation.
+
+**Exit criteria:** A new team member can run the app from a clean clone using README instructions.
+
+## 11. Suggested Milestones
+
+| Milestone | Deliverable |
+|---|---|
+| M1 | Requirements, architecture, API contracts, skeleton |
+| M2 | Dataset cleaning and feature extraction |
+| M3 | Rule baseline and tests |
+| M4 | Isolation Forest model and FastAPI service |
+| M5 | Hybrid gateway and persistence |
+| M6 | React dashboard |
+| M7 | Reproducible evaluation |
+| M8 | Final QA, report, and demo |
+
+## 12. Definition of Done
+
+A task is complete only when:
+- Implementation is committed in the correct module.
+- Validation and error states are handled.
+- Relevant automated tests pass.
+- API contracts and README are updated.
+- No secrets, fabricated metrics, unsafe proxying, or unescaped request payloads are introduced.
+- The team can explain the code and the design decision.
+
+## 13. Instructions for Antigravity Agent
+
+1. Read all six Markdown files before coding.
+2. Inspect the existing repository and identify the actual stack/files before making changes.
+3. Present a short implementation plan and proposed file tree first.
+4. Build one phase at a time; after each phase, run tests/build and report exact results.
+5. Do not silently change the project scope or replace Spring Boot with another gateway technology.
+6. Do not invent evaluation results, API responses from a live system, dataset provenance, or deployment success.
+7. If a requirement conflicts with the existing repository, explain the conflict and propose the smallest safe resolution.
+8. Prefer understandable, maintainable code over unnecessary abstractions.
+9. Keep local demo mode safe: no arbitrary external proxy targets and no real attacks against third-party systems.
+10. Finish with exact run commands, environment setup, tests executed, known limitations, and next steps.

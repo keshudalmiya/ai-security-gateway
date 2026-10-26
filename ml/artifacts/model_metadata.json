@@ -1,0 +1,27 @@
+{
+  "model_version": "iforest-csic-v1",
+  "algorithm": "IsolationForest",
+  "n_estimators": 100,
+  "contamination": 0.05,
+  "random_seed": 42,
+  "training_sample_count": 20000,
+  "feature_names": [
+    "requestLength",
+    "urlLength",
+    "parameterCount",
+    "specialCharCount",
+    "httpMethodCode",
+    "headerCount",
+    "bodyLength",
+    "requestRate1m"
+  ],
+  "feature_schema_version": "v1",
+  "train_duration_seconds": 0.235,
+  "score_bounds": {
+    "min_score": -0.7300716225951619,
+    "max_score": -0.37273149446507653,
+    "decision_threshold": -0.6374382772098637
+  },
+  "dataset_name": "CSIC 2010 HTTP Dataset (Spanish National Research Council)",
+  "createdAt": "2026-10-26T08:13:56Z"
+}
