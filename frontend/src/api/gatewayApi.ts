@@ -8,7 +8,7 @@ import type {
   SystemHealth
 } from '../types';
 
-const API_BASE = import.meta.env.VITE_GATEWAY_API_URL || 'http://localhost:8080/api/v1';
+const API_BASE = import.meta.env.VITE_GATEWAY_API_URL || '/api/v1';
 
 async function fetchJson<T>(url: string, options?: RequestInit): Promise<T> {
   const res = await fetch(url, {
